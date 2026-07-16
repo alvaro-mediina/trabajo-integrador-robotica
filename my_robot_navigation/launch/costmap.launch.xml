@@ -1,0 +1,29 @@
+<launch>
+    <node pkg="nav2_costmap_2d" exec="nav2_costmap_2d"
+          name="global_costmap" namespace="global_costmap" output="screen">
+        <param from="$(find-pkg-share my_robot_navigation)/config/nav2_params.yaml" />
+        <param name="use_sim_time" value="true" />
+    </node>
+
+    <node pkg="nav2_lifecycle_manager" exec="lifecycle_manager"
+          name="lifecycle_manager_global_costmap" namespace="global_costmap" output="screen">
+        <param name="use_sim_time" value="true" />
+        <param name="autostart" value="true" />
+        <param name="bond_timeout" value="0.0" />
+        <param name="node_names" value="['global_costmap']" />
+    </node>
+
+    <node pkg="nav2_costmap_2d" exec="nav2_costmap_2d"
+          name="local_costmap" namespace="local_costmap" output="screen">
+        <param from="$(find-pkg-share my_robot_navigation)/config/nav2_params.yaml" />
+        <param name="use_sim_time" value="true" />
+    </node>
+
+    <node pkg="nav2_lifecycle_manager" exec="lifecycle_manager"
+          name="lifecycle_manager_local_costmap" namespace="local_costmap" output="screen">
+        <param name="use_sim_time" value="true" />
+        <param name="autostart" value="true" />
+        <param name="bond_timeout" value="0.0" />
+        <param name="node_names" value="['local_costmap']" />
+    </node>
+</launch>
