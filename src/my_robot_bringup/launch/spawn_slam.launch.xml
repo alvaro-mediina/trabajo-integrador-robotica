@@ -1,13 +1,13 @@
 <launch>
-    <set_env name="GZ_SIM_RESOURCE_PATH" value="$(find-pkg-share my_robot_bringup)/worlds/models:$(find-pkg-share my_robot_description)/.." />
-
+    <set_env name="GZ_SIM_RESOURCE_PATH"         value="$(find-pkg-share my_robot_bringup)/worlds/models:$(find-pkg-share my_robot_bringup):$(find-pkg-share my_robot_description)/.." />
+    
     <let name="urdf_path"
          value="$(find-pkg-share my_robot_description)/urdf/my_robot.urdf.xacro" />
     <let name="rviz_config_path"
          value="$(find-pkg-share my_robot_description)/rviz/slam_rviz.rviz" />
 
     <!-- ============ Argumentos ============ -->
-    <arg name="world_path" default="$(find-pkg-share my_robot_bringup)/worlds/bookstore_final.sdf" />
+    <arg name="world_path" default="$(find-pkg-share my_robot_bringup)/worlds/house_world.sdf" />
 
     <!-- Punto de spawn del robot en el mundo -->
     <arg name="spawn_x" default="0.0" />
@@ -20,13 +20,10 @@
         <param name="use_sim_time" value="true"/>
     </node>
 
-    <!-- Gazebo: SOLO servidor (física + sensores), sin GUI acá -->
+    <!-- Gazebo: servidor + GUI -->
     <include file="$(find-pkg-share ros_gz_sim)/launch/gz_sim.launch.py">
-        <arg name="gz_args" value="$(var world_path) -r -s" />
+        <arg name="gz_args" value="-r -v 4 $(var world_path)" />
     </include>
-
-    <!-- GUI de Gazebo como proceso aparte, conectada al servidor de arriba -->
-    <executable cmd="gz sim -g" output="screen" />
 
     <!-- Spawn del robot -->
     <node pkg="ros_gz_sim" exec="create"
