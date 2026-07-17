@@ -16,7 +16,6 @@ install(DIRECTORY
   config
   worlds
   maps
-  photos
   DESTINATION share/${PROJECT_NAME}/
   )
 
