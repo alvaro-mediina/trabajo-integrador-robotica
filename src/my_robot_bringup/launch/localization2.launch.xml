@@ -7,9 +7,9 @@
          value="$(find-pkg-share my_robot_description)/rviz/rviz_localization.rviz" />
 
     <!-- ============ Argumentos ============ -->
-    <arg name="world_path" default="$(find-pkg-share my_robot_bringup)/worlds/house_world.sdf"/>
-    <arg name="map_path" default="$(find-pkg-share my_robot_bringup)/maps/house_world_map.yaml"/>
-    
+    <arg name="world_path" default="$(find-pkg-share my_robot_bringup)/worlds/house_world.sdf" />
+    <arg name="map_path" default="$(find-pkg-share my_robot_bringup)/maps/house_world_mapv2.yaml" />
+
     <!-- Punto de spawn del robot en el mundo -->
     <arg name="spawn_x" default="0.0" />
     <arg name="spawn_y" default="0.0" />
