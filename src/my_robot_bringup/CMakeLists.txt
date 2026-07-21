@@ -15,7 +15,6 @@ install(DIRECTORY
   launch
   config
   worlds
-  worlds/models
   maps
   DESTINATION share/${PROJECT_NAME}/
   )
