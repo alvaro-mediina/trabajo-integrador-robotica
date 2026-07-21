@@ -1,4 +1,4 @@
-image: maps.pgm
+image: warehouse_map_v1.pgm
 mode: trinary
 resolution: 0.050
 origin: [-7.051, -10.437, 0]
