@@ -2,9 +2,9 @@
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
   <!-- Parámetros generales -->
-  <xacro:property name="package_name" value="my_robot_description"/>
+  <xacro:arg name="package_name" default="my_robot_description"/>
   <!-- Le pasas de donde va a sacar los modelos-->
-  <xacro:property name="mesh_dir" value="meshes"/> 
+  <xacro:arg name="mesh_dir" default="meshes"/> 
 
   <!-- Escala global del modelo CAD exportado desde SolidWorks -->
   <xacro:property name="global_scale" value="1.0"/>
@@ -72,7 +72,7 @@
   <xacro:property name="castor_wheel_width" value="0.020"/>
   <xacro:property name="castor_wheel_mass" value="0.086"/>
 
-  <xacro:include filename="my_robot_gazebo.xacro" />
+  <!-- <xacro:include filename="my_robot_gazebo.xacro" />  Lo saque para probar-->
   <!-- Macros auxiliares -->
   <xacro:macro name="box_inertia" params="m x y z o_xyz o_rpy">
     <inertial>
@@ -101,7 +101,7 @@
       <visual>
         <origin xyz="${base_visual_xyz}" rpy="${base_visual_rpy}"/>
         <geometry>
-          <mesh filename="package://${package_name}/${mesh_dir}/${mesh}" scale="${scale}"/>
+          <mesh filename="package://$(arg package_name)/$(arg mesh_dir)/${mesh}" scale="${scale}"/>
         </geometry>
         <material name="blue"/>
       </visual>
@@ -124,7 +124,7 @@
       <visual>
         <origin xyz="${left_wheel_visual_xyz}" rpy="${left_wheel_visual_rpy}"/>
         <geometry>
-          <mesh filename="package://${package_name}/${mesh_dir}/${mesh}" scale="${scale}"/>
+          <mesh filename="package://$(arg package_name)/$(arg mesh_dir)/${mesh}" scale="${scale}"/>
         </geometry>
         <material name="grey"/>
       </visual>
@@ -146,7 +146,7 @@
       <visual>
         <origin xyz="${castor_base_visual_xyz}" rpy="${castor_base_visual_rpy}"/>
         <geometry>
-          <mesh filename="package://${package_name}/${mesh_dir}/${mesh}" scale="${scale}"/>
+          <mesh filename="package://$(arg package_name)/$(arg mesh_dir)/${mesh}" scale="${scale}"/>
         </geometry>
         <material name="green"/>
       </visual>
@@ -160,7 +160,7 @@
       <visual>
         <origin xyz="${castor_wheel_visual_xyz}" rpy="${castor_wheel_visual_rpy}"/>
         <geometry>
-          <mesh filename="package://${package_name}/${mesh_dir}/${mesh}" scale="${scale}"/>
+          <mesh filename="package://$(arg package_name)/$(arg mesh_dir)/${mesh}" scale="${scale}"/>
         </geometry>
         <material name="yellow"/>
       </visual>
@@ -260,6 +260,7 @@
     <parent link="base_link"/>
     <child link="Rueda_izquierda_link"/>
     <axis xyz="${left_wheel_axis}"/>
+    <dynamics damping="0.1" friction="0.05"/>
   </joint>
 
  <!-- Completar Joint rueda_derecha_link>base_link-->
@@ -268,6 +269,7 @@
     <parent link="base_link"/>
     <child link="Rueda_derecha_link"/>
     <axis xyz="${right_wheel_axis}"/>
+    <dynamics damping="0.1" friction="0.05"/>
   </joint>  
  <!-- Completar Joint Base_castor_link>base_link-->
   <joint name="Base_castor_joint" type="fixed">
@@ -282,6 +284,7 @@
     <parent link="Base_castor_link"/>
     <child link="Rueda_castor_link"/>
     <axis xyz="${castor_wheel_axis}"/>
+    <dynamics damping="0.05" friction="0.02"/>
   </joint>
 
   <joint name="Lidar_joint" type="fixed">
@@ -290,4 +293,25 @@
     <child link="Lidar_link"/>
     <axis xyz="0 1 0" />
 </joint>
+
+  <!-- Fricción de las ruedas motrices para reducir deslizamiento en Gazebo -->
+<gazebo reference="Rueda_izquierda_link">
+  <mu1>2.0</mu1>
+  <mu2>2.0</mu2>
+  <kp>1e6</kp>    <kd>1.0</kd>
+</gazebo>
+
+<gazebo reference="Rueda_derecha_link">
+  <mu1>2.0</mu1>
+  <mu2>2.0</mu2>
+  <kp>1e6</kp>
+  <kd>1.0</kd>
+</gazebo>
+
+  <!-- Rueda castor con fricción mínima para que gire libre -->
+<gazebo reference="Rueda_castor_link">
+  <mu1>0.01</mu1>
+  <mu2>0.01</mu2>
+</gazebo>
+
 </robot>

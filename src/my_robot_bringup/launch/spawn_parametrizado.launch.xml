@@ -1,0 +1,53 @@
+<launch>
+    <set_env name="GZ_SIM_RESOURCE_PATH" value="$(find-pkg-share my_robot_description)/.." />
+
+    <let name="urdf_path"
+         value="$(find-pkg-share my_robot_description)/urdf/my_robot.urdf.xacro" />
+    <let name="rviz_config_path"
+         value="$(find-pkg-share my_robot_description)/rviz/config_dos_caminos.rviz" />
+
+    <!-- ============ Argumentos ============ -->
+    <arg name="world_path" default="$(find-pkg-share my_robot_bringup)/worlds/bookstore_final.sdf" />
+
+    <!-- Coordenadas: UNA sola fuente para spawn + nodo (no desincronizar) -->
+    <arg name="inicio_x" default="-2.025" />
+    <arg name="inicio_y" default="3.150" />
+    <arg name="fin_x"    default="3.825" />
+    <arg name="fin_y"    default="-1.8" />
+
+    <!-- Estado del robot -->
+    <node pkg="robot_state_publisher" exec="robot_state_publisher">
+        <param name="robot_description"
+               value="$(command 'xacro $(var urdf_path)')" />
+        <param name="use_sim_time" value="true"/>
+    </node>
+
+    <!-- Gazebo + mundo -->
+    <include file="$(find-pkg-share ros_gz_sim)/launch/gz_sim.launch.py">
+        <arg name="gz_args" value="$(var world_path) -r" />
+    </include>
+
+    <!-- Spawn del robot (usa los args de inicio) -->
+    <node pkg="ros_gz_sim" exec="create"
+          args="-topic robot_description -x $(var inicio_x) -y $(var inicio_y) -z 0.1" />
+
+    <!-- Puente ROS <-> Gazebo -->
+    <node pkg="ros_gz_bridge" exec="parameter_bridge">
+        <param name="config_file" value="$(find-pkg-share my_robot_bringup)/config/config.yaml" />
+    </node>
+
+    <!-- Nodo de odometría: MISMOS args que el spawn -->
+    <node pkg="my_robot_navigation_pkg" exec="odometry_grid" output="screen">
+        <param name="use_sim_time"       value="true" />
+        <param name="inicio_x"           value="$(var inicio_x)" />
+        <param name="inicio_y"           value="$(var inicio_y)" />
+        <param name="fin_x"              value="$(var fin_x)" />
+        <param name="fin_y"              value="$(var fin_y)" />
+        <param name="tamano_celda"       value="0.45" />
+        <param name="tolerancia_llegada" value="0.35" />
+    </node>
+
+    <!-- RViz -->
+    <node pkg="rviz2" exec="rviz2" output="screen"
+          args="-d $(var rviz_config_path)" />
+</launch>
