@@ -244,3 +244,17 @@ controller_server:
         offset_from_furthest: 4
         threshold_to_consider: 0.5
         max_angle_to_furthest: 1.2
+
+orchestrator:
+  ros__parameters:
+    use_sim_time: true
+
+    global_frame: "map"
+    robot_frame: "base_link"
+
+    planner_id: "GridBased"
+    controller_id: "RPP"
+    goal_checker_id: "goal_checker"
+    progress_checker_id: "progress_checker"
+
+    replanning_frequency: 1.0
