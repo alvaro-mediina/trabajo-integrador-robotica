@@ -31,5 +31,4 @@ __pycache__/
 .DS_Store
 Thumbs.db
 
-
-micro_ros_ws/
+micro_ros_ws/firmware
