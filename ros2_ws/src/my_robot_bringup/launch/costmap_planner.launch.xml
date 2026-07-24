@@ -7,8 +7,8 @@
          value="$(find-pkg-share my_robot_description)/rviz/costmaps.rviz" />
 
     <!-- ============ Argumentos ============ -->
-    <arg name="world_path" default="$(find-pkg-share my_robot_bringup)/worlds/warehouse_world.sdf" />
-    <arg name="map_path" default="$(find-pkg-share my_robot_bringup)/maps/warehouse_map_v1.yaml" />
+    <arg name="world_path" default="$(find-pkg-share my_robot_bringup)/worlds/warehouse.sdf" />
+    <arg name="map_path" default="$(find-pkg-share my_robot_bringup)/maps/warehouse.yaml" />
 
     <!-- Punto de spawn del robot en el mundo -->
     <arg name="spawn_x" default="0.0" />
@@ -74,9 +74,17 @@
 
     <node pkg="nav2_lifecycle_manager" exec="lifecycle_manager" name="lifecycle_manager_navigation" output="screen">
         <param name="use_sim_time" value="true" />
-        <param name="autostart" value="true" />
+        <param name="autostart" value="false" />
         <param name="node_names" value="['planner_server', 'controller_server']" />
     </node>
+
+    <!-- ============ Parte 4: Orquestador ============ -->
+    <!-- No es lifecycle: arranca con el launch pero solo le habla a Nav2 cuando -->
+    <!-- llega una meta, así que respeta la activación manual de planner/controller -->
+    <!--<node pkg="my_robot_orchestrator" exec="orchestrator" name="orchestrator" output="screen">
+        <param from="$(find-pkg-share my_robot_orchestrator)/config/orchestrator_params.yaml" />
+        <param name="use_sim_time" value="true" />
+    </node> -->
 
     <!-- RViz -->
     <node pkg="rviz2" exec="rviz2" output="screen"

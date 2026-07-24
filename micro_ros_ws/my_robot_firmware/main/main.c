@@ -207,7 +207,7 @@ void micro_ros_task(void *arg)
         &subscriber,
         &node,
         ROSIDL_GET_MSG_TYPE_SUPPORT(geometry_msgs, msg, Twist),
-        "cmd_vel"));
+        "/cmd_vel"));
 
     // Inicializo el servicio
     /*RCCHECK(rclc_service_init_default(&service,
