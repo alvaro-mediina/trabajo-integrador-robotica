@@ -74,7 +74,7 @@
 
     <node pkg="nav2_lifecycle_manager" exec="lifecycle_manager" name="lifecycle_manager_navigation" output="screen">
         <param name="use_sim_time" value="true" />
-        <param name="autostart" value="false" />
+        <param name="autostart" value="true" />
         <param name="node_names" value="['planner_server', 'controller_server']" />
     </node>
 
